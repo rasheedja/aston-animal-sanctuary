@@ -53,7 +53,7 @@ if (isset($_SESSION['name'])) {
             </ul>
         </div>
         <div id="inner-center">
-            <h3>Your Successful Adoption Requests</h3>
+            <h3>Your Approved Adoption Requests</h3>
             <div class="animals">
                 <?php
                 // display successful adoption requests from the user

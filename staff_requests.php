@@ -15,8 +15,6 @@ if (isset($_SESSION['name'])) {
     if ($user['staff'] == 0) {
         header("Location: home.php");
     }
-    include_once('display_animal.php');
-    //DELETE FROM owns WHERE user_id = 1 AND animal_id = 1
 } else {
     header("Location: index.php");
 }
@@ -26,7 +24,7 @@ if (isset($_SESSION['name'])) {
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Aston Animal Sanctuary</title>
+    <title>Aston Animal Sanctuary: Adoption Requests</title>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
     <link rel="stylesheet" type="text/css" href="stylesheet.css" />
 </head>
@@ -57,37 +55,51 @@ if (isset($_SESSION['name'])) {
         </ul>
     </div>
     <div id="inner-center">
+        <h3>Approved Adoption Requests</h3>
         <div class="animals">
-            <h3>Available Animals</h3>
             <?php
-            // display the information on the animals owned by the user
-            $query = "SELECT * FROM owns WHERE user_id = $user_id";
+            // display successful adoption requests from the user
+            $query = "SELECT * FROM adoption_request WHERE approved=1";
             $result = $db->query($query);
-            $has_animal = false;
+            $has_approved_adoption_request = false;
             while ($animal = $result->fetch()) {
                 print_animal_info($animal, $db, false);
-                $has_animal = true;
+                $has_approved_adoption_request = true;
             }
-            if (!$has_animal) {
-                echo "<p class=error>You have no animals</p>";
+            if (!$has_approved_adoption_request) {
+                echo "<p class=error>There are no approved adoption requests</p>";
             }
             ?>
         </div>
+        <h3>Pending Adoption Requests</h3>
         <div class="animals">
-            <h3>Adoption Requests</h3>
             <?php
-            // display all pending adoption requests
+            // display open adoption requests from the user
             $query = "SELECT * FROM adoption_request WHERE approved=0";
             $result = $db->query($query);
             $has_adoption_request = false;
-            while ($animal = $result->fetch()) {;
-                $adoption_id = $animal['adoption_id'];
-                $adopter = $animal['user_id'];
-                print_animal_info($animal, $db, "Approve", "Deny", "handle_request.php", "get", $adoption_id, $adopter);
+            while ($animal = $result->fetch()) {
+                print_animal_info($animal, $db, false);
                 $has_adoption_request = true;
             }
             if (!$has_adoption_request) {
-                echo "<p class=error>There are no adoption requests at the moment</p>";
+                echo "<p class=error>There are no pending adoption requests</p>";
+            }
+            ?>
+        </div>
+        <h3>Denied Adoption Requests</h3>
+        <div class="animals">
+            <?php
+            // display denied adoption requests from the user
+            $query = "SELECT * FROM adoption_request WHERE approved=2";
+            $result = $db->query($query);
+            $has_denied_adoption_request = false;
+            while ($animal = $result->fetch()) {
+                print_animal_info($animal, $db, false);
+                $has_denied_adoption_request = true;
+            }
+            if (!$has_denied_adoption_request) {
+                echo "<p class=error>There are no denied adoption requests</p>";
             }
             ?>
         </div>

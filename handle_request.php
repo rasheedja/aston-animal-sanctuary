@@ -39,7 +39,7 @@ if (isset($_SESSION['name'])) {
                 <a href="staff_animals.php">Available Animals</a>
             </li>
             <li>
-                <a href="requests.php">Adoption Requests</a>
+                <a href="staff_requests.php">Adoption Requests</a>
             </li>
             <li id="search">
                 <form action="search.php" method="get">
