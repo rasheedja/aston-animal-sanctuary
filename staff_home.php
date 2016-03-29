@@ -38,7 +38,7 @@ if (isset($_SESSION['name'])) {
                 <a href="staff_home.php">Home</a>
             </li>
             <li>
-                <a href="animals.php">Available Animals</a>
+                <a href="staff_animals.php">Available Animals</a>
             </li>
             <li>
                 <a href="requests.php">Adoption Requests</a>

@@ -11,6 +11,10 @@ if (isset($_SESSION['name'])) {
     $result = $db->query($query);
     $user = $result->fetch();
     $user_id = $user['id'];
+    // store information on all animals in the system
+    $query = "SELECT * FROM animals";
+    $result = $db->query($query);
+    include_once('display_animal.php');
     // redirect non staff users to standard home page
     if ($user['staff'] == 0) {
         header("Location: home.php");
@@ -24,7 +28,7 @@ if (isset($_SESSION['name'])) {
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Aston Animal Sanctuary: Request Handled</title>
+    <title>Aston Animal Sanctuary: All Animals</title>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
     <link rel="stylesheet" type="text/css" href="stylesheet.css" />
 </head>
@@ -55,36 +59,15 @@ if (isset($_SESSION['name'])) {
         </ul>
     </div>
     <div id="inner-center">
-        <?php
-        if (isset($_GET['approve'])) {
-            // set the adoption request to approved
-            $adoption_id = $_GET['approve'];
-            $query = "UPDATE adoption_request SET approved=1 WHERE adoption_id=$adoption_id";
-            $db->query($query);
-            // switch the owner for the pet
-            $query = "SELECT * FROM adoption_request WHERE adoption_id = $adoption_id";
-            $result = $db->query($query);
-            $adoption_info = $result->fetch();
-            $user_id = $adoption_info['user_id'];
-            $animal_id = $adoption_info['animal_id'];
-            $query = "UPDATE owns SET user_id=$user_id WHERE animal_id=$animal_id";
-            $db->query($query);
-            echo "<h3>Adoption Request Approved</h3>";
-        } else if (isset($_GET['deny'])) {
-            // set the adoption request to denied
-            $adoption_id = $_GET['deny'];
-            $query = "UPDATE adoption_request SET approved=2 WHERE adoption_id=$adoption_id";
-            $db->query($query);
-            // switch the pet back to available
-            $query = "SELECT animal_id FROM adoption_request WHERE adoption_id = $adoption_id";
-            $result = $db->query($query);
-            $animal_id = $result->fetch();
-            $animal_id = $animal_id['animal_id'];
-            $query = "UPDATE animals SET available=1 WHERE id=$animal_id";
-            $db->query($query);
-            echo "<h3>Adoption Request Denied</h3>";
-        }
-        ?>
+        <div class="animals">
+            <h3>Animals</h3>
+            <?php
+            // display information on all animals
+            while ($animal_info = $result -> fetch()) {
+                parse_animal_info($animal_info);
+            }
+            ?>
+        </div>
     </div>
 </div>
 </body>
