@@ -21,10 +21,7 @@ if (isset($_SESSION['name'])) {
         $latest_date_of_birth = strtotime("+1 year", $earliest_date_of_birth);
         $earliest_date_of_birth = date("Y-m-d", $earliest_date_of_birth);
         $latest_date_of_birth = date("Y-m-d", $latest_date_of_birth);
-
-        echo $earliest_date_of_birth;
         $query = "SELECT * FROM animals WHERE available=1 AND date_of_birth<='$latest_date_of_birth' AND date_of_birth>='$earliest_date_of_birth'";
-        echo $query;
     } else {
         // search for animals with a name that was searched for
         $query = "SELECT * FROM animals WHERE available=1 AND name LIKE '%$search_query%'";
@@ -39,7 +36,7 @@ if (isset($_SESSION['name'])) {
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Aston Animal Sanctuary</title>
+    <title>Aston Animal Sanctuary: <?php echo $search_query ?></title>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
     <link rel="stylesheet" type="text/css" href="stylesheet.css" />
 </head>

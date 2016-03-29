@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Log In</title>
+        <title>Aston Animal Sanctuary: Log In</title>
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="stylesheet.css" />
     </head>
@@ -34,11 +34,15 @@
                 $query = "SELECT * FROM users WHERE username = $clean_username";
                 $result = $db->query($query);
                 $user_info = $result->fetch();
-
+                $staff = $user_info['staff'];
                 if (!empty($user_info)) {
                     if (password_verify($password, $user_info['password'])) {
                         $_SESSION['name'] = $user_info['username'];
-                        header("Location: home.php");
+                        if ($staff == 0) {
+                            header("Location: home.php");
+                        } else {
+                            header("Location: staff_home.php");
+                        }
                         exit();
                     } else {
                         echo "<p class='error'>Error logging in, incorrect password</p>";

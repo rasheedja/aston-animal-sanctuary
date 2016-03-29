@@ -20,7 +20,7 @@ if (isset($_SESSION['name'])) {
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Available Animals</title>
+        <title>Aston Animal Sanctuary: Available Animals</title>
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="stylesheet.css" />
     </head>
@@ -56,7 +56,7 @@ if (isset($_SESSION['name'])) {
                     <?php
                     // display information on all available animals
                     while ($animal_info = $result -> fetch()) {
-                        parse_animal_info($animal_info, true);
+                        parse_animal_info($animal_info, "Adopt", null, "make_request.php", "get");
                     }
                     ?>
                 </div>

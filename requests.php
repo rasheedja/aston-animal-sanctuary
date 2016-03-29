@@ -22,7 +22,7 @@ if (isset($_SESSION['name'])) {
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>Aston Animal Sanctuary</title>
+        <title>Aston Animal Sanctuary: Your Adoption Requests</title>
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
         <link rel="stylesheet" type="text/css" href="stylesheet.css" />
     </head>
