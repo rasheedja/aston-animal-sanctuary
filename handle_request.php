@@ -7,10 +7,14 @@ if (isset($_SESSION['name'])) {
     $db = new PDO("mysql:dbname=rasheeja_db;host=localhost", "root", "***REMOVED***");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // store user information in a variable
-    $query = "SELECT * FROM users WHERE username = '$username'";
-    $result = $db->query($query);
-    $user = $result->fetch();
-    $user_id = $user['id'];
+    try {
+        $query = "SELECT * FROM users WHERE username = '$username'";
+        $result = $db->query($query);
+        $user = $result->fetch();
+        $user_id = $user['id'];
+    } catch (PDOException $e) {
+        echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+    }
     // redirect non staff users to standard home page
     if ($user['staff'] == 0) {
         header("Location: home.php");
@@ -59,29 +63,38 @@ if (isset($_SESSION['name'])) {
         if (isset($_GET['approve'])) {
             // set the adoption request to approved
             $adoption_id = $_GET['approve'];
-            $query = "UPDATE adoption_request SET approved=1 WHERE adoption_id=$adoption_id";
-            $db->exec($query);
-            // switch the owner for the pet
-            $query = "SELECT * FROM adoption_request WHERE adoption_id = $adoption_id";
-            $result = $db->query($query);
-            $adoption_info = $result->fetch();
-            $user_id = $adoption_info['user_id'];
-            $animal_id = $adoption_info['animal_id'];
-            $query = "UPDATE owns SET user_id=$user_id WHERE animal_id=$animal_id";
-            $db->exec($query);
+            try {
+                $query = "UPDATE adoption_request SET approved=1 WHERE adoption_id=$adoption_id";
+                $db->exec($query);
+                // switch the owner for the pet
+                $query = "SELECT * FROM adoption_request WHERE adoption_id = $adoption_id";
+                $result = $db->query($query);
+                $adoption_info = $result->fetch();
+                $user_id = $adoption_info['user_id'];
+                $animal_id = $adoption_info['animal_id'];
+                $query = "UPDATE owns SET user_id=$user_id WHERE animal_id=$animal_id";
+                $db->exec($query);
+            } catch (PDOException $e) {
+                echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+            }
             echo "<h3>Adoption Request Approved</h3>";
         } else if (isset($_GET['deny'])) {
             // set the adoption request to denied
             $adoption_id = $_GET['deny'];
-            $query = "UPDATE adoption_request SET approved=2 WHERE adoption_id=$adoption_id";
-            $db->exec($query);
-            // switch the pet back to available
-            $query = "SELECT animal_id FROM adoption_request WHERE adoption_id = $adoption_id";
-            $result = $db->query($query);
-            $animal_id = $result->fetch();
-            $animal_id = $animal_id['animal_id'];
-            $query = "UPDATE animals SET available=1 WHERE id=$animal_id";
-            $db->exec($query);
+            try {
+                $query = "UPDATE adoption_request SET approved=2 WHERE adoption_id=$adoption_id";
+                $db->exec($query);
+                // switch the pet back to available
+                $query = "SELECT animal_id FROM adoption_request WHERE adoption_id = $adoption_id";
+                $result = $db->query($query);
+                $animal_id = $result->fetch();
+                $animal_id = $animal_id['animal_id'];
+                $query = "UPDATE animals SET available=1 WHERE id=$animal_id";
+                $db->exec($query);
+            } catch (PDOException $e) {
+                echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+            }
+
             echo "<h3>Adoption Request Denied</h3>";
         }
         ?>

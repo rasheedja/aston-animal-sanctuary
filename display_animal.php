@@ -12,8 +12,12 @@
 function print_animal_info($animal, $db, $button_text_1, $button_text_2, $action, $method, $value, $user_id) {
     $animal_id = $animal['animal_id'];
     $_GET['animal_id'] = $animal_id;
-    $query = "SELECT * FROM animals WHERE id = $animal_id";
-    $result = $db->query($query);
+    try {
+        $query = "SELECT * FROM animals WHERE id = $animal_id";
+        $result = $db->query($query);
+    } catch (PDOException $e) {
+        echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+    }
     while ($animal_info = $result -> fetch()) {
         parse_animal_info($animal_info, $button_text_1, $button_text_2, $action, $method, $value, $user_id);
     }

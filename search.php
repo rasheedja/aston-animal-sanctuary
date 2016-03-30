@@ -26,13 +26,18 @@ if (isset($_SESSION['name'])) {
         // search for animals with a name or type that was searched for
         $query = "SELECT * FROM animals WHERE available=1 AND name LIKE '%$search_query%' OR type LIKE '%$search_query%'";
     }
-    $result = $db->query($query);
-    // check and store whether a user is a staff member or not
-    $query_user = "SELECT * FROM users WHERE username = '$username'";
-    $result_user = $db->query($query_user);
-    $user = $result_user->fetch();
-    $user_id = $user['id'];
-    $staff = $user['staff'] == 1;
+    try {
+        $result = $db->query($query);
+        // check and store whether a user is a staff member or not
+        $query_user = "SELECT * FROM users WHERE username = '$username'";
+        $result_user = $db->query($query_user);
+        $user = $result_user->fetch();
+        $user_id = $user['id'];
+        $staff = $user['staff'] == 1;
+    } catch (PDOException $e) {
+        echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+    }
+
 } else {
     header("Location: index.php");
 }

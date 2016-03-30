@@ -31,8 +31,12 @@
                 //clean any malicious input
                 $clean_username = $db->quote($username);
                 //retrieve users information from the database
-                $query = "SELECT * FROM users WHERE username = $clean_username";
-                $result = $db->query($query);
+                try {
+                    $query = "SELECT * FROM users WHERE username = $clean_username";
+                    $result = $db->query($query);
+                } catch (PDOException $e) {
+                    echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+                }
                 $user_info = $result->fetch();
                 $staff = $user_info['staff'];
                 if (!empty($user_info)) {

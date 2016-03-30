@@ -7,18 +7,23 @@ if (isset($_SESSION['name'])) {
     $db = new PDO("mysql:dbname=rasheeja_db;host=localhost", "root", "***REMOVED***");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // store user information in a variable
-    $query = "SELECT * FROM users WHERE username = '$username'";
-    $result = $db->query($query);
-    $user = $result->fetch();
-    $user_id = $user['id'];
-    // store information on all animals in the system
-    $query = "SELECT * FROM animals";
-    $result = $db->query($query);
-    include_once('display_animal.php');
-    // redirect non staff users to standard home page
-    if ($user['staff'] == 0) {
-        header("Location: home.php");
+    try {
+        $query = "SELECT * FROM users WHERE username = '$username'";
+        $result = $db->query($query);
+        $user = $result->fetch();
+        $user_id = $user['id'];
+        // store information on all animals in the system
+        $query = "SELECT * FROM animals";
+        $result = $db->query($query);
+        include_once('display_animal.php');
+        // redirect non staff users to standard home page
+        if ($user['staff'] == 0) {
+            header("Location: home.php");
+        }
+    } catch (PDOException $e) {
+        echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
     }
+
 } else {
     header("Location: index.php");
 }
@@ -153,17 +158,17 @@ if (isset($_SESSION['name'])) {
                     echo "<p class='error'>Enter a type for the animal</p>";
                 }
                 if ($error_thrown == false) {
-                    $query = "INSERT INTO animals (id, name, date_of_birth, description, photo, available, type) VALUES (NULL, '$name', '$birthday', '$description', '$target', '1', '$type')";
-                    if ($db->exec($query)) {
+                    try {
+                        $query = "INSERT INTO animals (id, name, date_of_birth, description, photo, available, type) VALUES (NULL, '$name', '$birthday', '$description', '$target', '1', '$type')";
+                        $db->exec($query);
                         echo "<p>Animal uploaded to database</p>";
                         // update owns table so animal is owned by the owner
                         $last_id = $db->lastInsertId();
                         $query = "INSERT INTO owns (user_id, animal_id) VALUES ('1', '$last_id')";
                         $db->exec($query);
-                    } else {
-                        echo "<p class='error'>Database error. Try again later.";
+                    } catch (PDOException $e) {
+                        echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
                     }
-
                 }
             }
         ?>

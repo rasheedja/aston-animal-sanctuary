@@ -28,15 +28,19 @@
                     // hash and salt all passwords for security
                     $hashed_and_salted_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                     // check if username exists
-                    $query = "SELECT username FROM users WHERE username = $safe_username";
-                    $result = $db->query($query);
-                    if ($result->rowCount() > 0) {
-                        echo "<p class='error'>Username already exists</p>";
-                    } else {
-                        // insert values into the database
-                        $query = "INSERT INTO users VALUES (default, $safe_username, 0, '$hashed_and_salted_password')";
-                        $db->exec($query);
-                        echo "<p>Welcome, $safe_username</p>";
+                    try {
+                        $query = "SELECT username FROM users WHERE username = $safe_username";
+                        $result = $db->query($query);
+                        if ($result->rowCount() > 0) {
+                            echo "<p class='error'>Username already exists</p>";
+                        } else {
+                            // insert values into the database
+                            $query = "INSERT INTO users VALUES (default, $safe_username, 0, '$hashed_and_salted_password')";
+                            $db->exec($query);
+                            echo "<p>Welcome, $safe_username</p>";
+                        }
+                    } catch (PDOException $e) {
+                        echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
                     }
                 }
                 ?>

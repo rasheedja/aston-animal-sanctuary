@@ -6,11 +6,14 @@ if (isset($_SESSION['name'])) {
     // connect to the database
     $db = new PDO("mysql:dbname=rasheeja_db;host=localhost", "root", "***REMOVED***");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // select all the available animals from the database
-    $query = "SELECT * FROM animals WHERE available=1";
-    $result = $db->query($query);
+    try {
+        // select all the available animals from the database
+        $query = "SELECT * FROM animals WHERE available=1";
+        $result = $db->query($query);
+    } catch (PDOException $e) {
+        echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+    }
     include_once('display_animal.php');
-    
 } else {
     header("Location: index.php");
 }

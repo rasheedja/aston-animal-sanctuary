@@ -7,8 +7,12 @@ if (isset($_SESSION['name'])) {
     $db = new PDO("mysql:dbname=rasheeja_db;host=localhost", "root", "***REMOVED***");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // store user information in a variable
-    $query = "SELECT * FROM users WHERE username = '$username'";
-    $result = $db->query($query);
+    try {
+        $query = "SELECT * FROM users WHERE username = '$username'";
+        $result = $db->query($query);
+    } catch (PDOException $e) {
+        echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+    }
     $user = $result->fetch();
     $user_id = $user['id'];
 
@@ -57,8 +61,12 @@ if (isset($_SESSION['name'])) {
             <div class="animals">
                 <?php
                 // display successful adoption requests from the user
-                $query = "SELECT * FROM adoption_request WHERE user_id = $user_id AND approved=1";
-                $result = $db->query($query);
+                try {
+                    $query = "SELECT * FROM adoption_request WHERE user_id = $user_id AND approved=1";
+                    $result = $db->query($query);
+                } catch (PDOException $e) {
+                    echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+                }
                 $has_approved_adoption_request = false;
                 while ($animal = $result->fetch()) {
                     print_animal_info($animal, $db, false);
@@ -73,8 +81,12 @@ if (isset($_SESSION['name'])) {
             <div class="animals">
                 <?php
                 // display open adoption requests from the user
-                $query = "SELECT * FROM adoption_request WHERE user_id = $user_id AND approved=0";
-                $result = $db->query($query);
+                try {
+                    $query = "SELECT * FROM adoption_request WHERE user_id = $user_id AND approved=0";
+                    $result = $db->query($query);
+                } catch (PDOException $e) {
+                    echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+                }
                 $has_adoption_request = false;
                 while ($animal = $result->fetch()) {
                     print_animal_info($animal, $db, false);
@@ -89,8 +101,12 @@ if (isset($_SESSION['name'])) {
             <div class="animals">
                 <?php
                 // display denied adoption requests from the user
-                $query = "SELECT * FROM adoption_request WHERE user_id = $user_id AND approved=2";
-                $result = $db->query($query);
+                try {
+                    $query = "SELECT * FROM adoption_request WHERE user_id = $user_id AND approved=2";
+                    $result = $db->query($query);
+                } catch (PDOException $e) {
+                    echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+                }
                 $has_denied_adoption_request = false;
                 while ($animal = $result->fetch()) {
                     print_animal_info($animal, $db, false);

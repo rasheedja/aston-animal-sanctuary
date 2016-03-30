@@ -7,13 +7,17 @@ if (isset($_SESSION['name'])) {
     $db = new PDO("mysql:dbname=rasheeja_db;host=localhost", "root", "***REMOVED***");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // store user information in a variable
-    $query = "SELECT * FROM users WHERE username = '$username'";
-    $result = $db->query($query);
-    $user = $result->fetch();
-    $user_id = $user['id'];
-    // store information on all animals in the system
-    $query = "SELECT * FROM animals";
-    $result = $db->query($query);
+    try {
+        $query = "SELECT * FROM users WHERE username = '$username'";
+        $result = $db->query($query);
+        $user = $result->fetch();
+        $user_id = $user['id'];
+        // store information on all animals in the system
+        $query = "SELECT * FROM animals";
+        $result = $db->query($query);
+    } catch (PDOException $e) {
+        echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+    }
     include_once('display_animal.php');
     // redirect non staff users to standard home page
     if ($user['staff'] == 0) {

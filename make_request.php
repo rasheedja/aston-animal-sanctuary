@@ -7,30 +7,35 @@ if (isset($_SESSION['name'])) {
     $db = new PDO("mysql:dbname=rasheeja_db;host=localhost", "root", "***REMOVED***");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // store user information in a variable
-    $query = "SELECT * FROM users WHERE username = '$username'";
-    $result = $db->query($query);
-    $user = $result->fetch();
-    $user_id = $user['id'];
-    // store the animal name and id in a variable
-    $animal_id = $_GET['adopt'];
-    $query = "SELECT name FROM animals WHERE id='$animal_id'";
-    $result = $db->query($query);
-    $animal_name = $result->fetch();
-    $animal_name = $animal_name['name'];
-    // create the adoption request if animal is available
-    $adoption_request_made = false;
-    $query = "SELECT available FROM animals WHERE id='$animal_id'";
-    $result = $db->query($query);
-    $availability = $result->fetch();
-    $availability = $availability['available'];
-    if ($availability != 0) {
-        $query = "INSERT INTO adoption_request (adoption_id, user_id, animal_id, approved) VALUES (NULL, '$user_id', '$animal_id', '0')";
-        $db->exec($query);
-        // make the animal unavailable
-        $query = "UPDATE animals SET available = '0' WHERE id = '$animal_id' ";
-        $db->exec($query);
-        $adoption_request_made = true;
-    }-
+    try {
+        $query = "SELECT * FROM users WHERE username = '$username'";
+        $result = $db->query($query);
+        $user = $result->fetch();
+        $user_id = $user['id'];
+        // store the animal name and id in a variable
+        $animal_id = $_GET['adopt'];
+        $query = "SELECT name FROM animals WHERE id='$animal_id'";
+        $result = $db->query($query);
+        $animal_name = $result->fetch();
+        $animal_name = $animal_name['name'];
+        // create the adoption request if animal is available
+        $adoption_request_made = false;
+        $query = "SELECT available FROM animals WHERE id='$animal_id'";
+        $result = $db->query($query);
+        $availability = $result->fetch();
+        $availability = $availability['available'];
+        if ($availability != 0) {
+            $query = "INSERT INTO adoption_request (adoption_id, user_id, animal_id, approved) VALUES (NULL, '$user_id', '$animal_id', '0')";
+            $db->exec($query);
+            // make the animal unavailable
+            $query = "UPDATE animals SET available = '0' WHERE id = '$animal_id' ";
+            $db->exec($query);
+            $adoption_request_made = true;
+        }
+    } catch (PDOException $e) {
+        echo "<p class='error'> Database Error Occurred: . $e->getMessage()</p>";
+    }
+
     include_once('display_animal.php');
 } else {
     header("Location: index.php");
