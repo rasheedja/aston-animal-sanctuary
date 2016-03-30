@@ -11,7 +11,7 @@ if (isset($_SESSION['name'])) {
     $search_query = $_GET["search_bar"];
     // check if search query is a number
     if (is_numeric($search_query)) {
-        // store the age in a variable
+        // store the age (or id) in a variable
         $age = $search_query;
         // number of years to subtract from the date;
         $earliest = $age + 1;
@@ -21,12 +21,18 @@ if (isset($_SESSION['name'])) {
         $latest_date_of_birth = strtotime("+1 year", $earliest_date_of_birth);
         $earliest_date_of_birth = date("Y-m-d", $earliest_date_of_birth);
         $latest_date_of_birth = date("Y-m-d", $latest_date_of_birth);
-        $query = "SELECT * FROM animals WHERE available=1 AND date_of_birth<='$latest_date_of_birth' AND date_of_birth>='$earliest_date_of_birth'";
+        $query = "SELECT * FROM animals WHERE available=1 AND date_of_birth<='$latest_date_of_birth' AND date_of_birth>='$earliest_date_of_birth' OR id=$age";
     } else {
         // search for animals with a name that was searched for
         $query = "SELECT * FROM animals WHERE available=1 AND name LIKE '%$search_query%'";
     }
     $result = $db->query($query);
+    // check and store whether a user is a staff member or not
+    $query_user = "SELECT * FROM users WHERE username = '$username'";
+    $result_user = $db->query($query_user);
+    $user = $result_user->fetch();
+    $user_id = $user['id'];
+    $staff = $user['staff'] == 1;
 } else {
     header("Location: index.php");
 }
@@ -45,17 +51,17 @@ if (isset($_SESSION['name'])) {
         <div id = "nav-bar">
             <ul id="nav">
                 <li>
-                    <a href="home.php">Home</a>
+                    <a href=<?php if($staff) {echo "staff_home.php";} else {echo "home.php";} ?>>Home</a>
                 </li>
                 <li>
-                    <a href="animals.php">Available Animals</a>
+                    <a href=<?php if($staff) {echo "staff_animals.php";} else {echo "animals.php";} ?>><?php if(!$staff) {echo "Available ";}?>Animals</a>
                 </li>
                 <li>
-                    <a href="requests.php">Adoption Requests</a>
+                    <a href=<?php if($staff) {echo "staff_requests.php";} else {echo "requests.php";}?>>Adoption Requests</a>
                 </li>
                 <li id="search">
                     <form action="search.php" method="get">
-                        <input type="text" name="search_bar" id="search_bar">
+                        <input type="search" name="search_bar" id="search_bar">
                     </form>
                 </li>
                 <li id="greeting">
@@ -73,7 +79,7 @@ if (isset($_SESSION['name'])) {
                 // display information on animals that meet the search query
                 $search_found = false;
                 while ($animal_info = $result -> fetch()) {
-                    parse_animal_info($animal_info, true);
+                    parse_animal_info($animal_info, "Adopt", null, "make_request.php", "get");
                     $search_found = true;
                 }
                 if (!$search_found) {

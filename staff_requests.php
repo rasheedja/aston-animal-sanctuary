@@ -15,6 +15,7 @@ if (isset($_SESSION['name'])) {
     if ($user['staff'] == 0) {
         header("Location: home.php");
     }
+    include_once('display_animal.php');
 } else {
     header("Location: index.php");
 }
@@ -43,7 +44,7 @@ if (isset($_SESSION['name'])) {
             </li>
             <li id="search">
                 <form action="search.php" method="get">
-                    <input type="text" name="search_bar" id="search_bar">
+                    <input type="search" name="search_bar" id="search_bar">
                 </form>
             </li>
             <li id="greeting">
@@ -63,7 +64,9 @@ if (isset($_SESSION['name'])) {
             $result = $db->query($query);
             $has_approved_adoption_request = false;
             while ($animal = $result->fetch()) {
-                print_animal_info($animal, $db, false);
+                $adoption_id = $animal['adoption_id'];
+                $adopter = $animal['user_id'];
+                print_animal_info($animal, $db, null, null, null, null, null, $adopter);
                 $has_approved_adoption_request = true;
             }
             if (!$has_approved_adoption_request) {
@@ -79,7 +82,9 @@ if (isset($_SESSION['name'])) {
             $result = $db->query($query);
             $has_adoption_request = false;
             while ($animal = $result->fetch()) {
-                print_animal_info($animal, $db, false);
+                $adoption_id = $animal['adoption_id'];
+                $adopter = $animal['user_id'];
+                print_animal_info($animal, $db, null, null, null, null, null, $adopter);
                 $has_adoption_request = true;
             }
             if (!$has_adoption_request) {
@@ -95,7 +100,9 @@ if (isset($_SESSION['name'])) {
             $result = $db->query($query);
             $has_denied_adoption_request = false;
             while ($animal = $result->fetch()) {
-                print_animal_info($animal, $db, false);
+                $adoption_id = $animal['adoption_id'];
+                $adopter = $animal['user_id'];
+                print_animal_info($animal, $db, null, null, null, null, null, $adopter);
                 $has_denied_adoption_request = true;
             }
             if (!$has_denied_adoption_request) {

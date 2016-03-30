@@ -45,7 +45,7 @@ if (isset($_SESSION['name'])) {
             </li>
             <li id="search">
                 <form action="search.php" method="get">
-                    <input type="text" name="search_bar" id="search_bar">
+                    <input type="search" name="search_bar" id="search_bar">
                 </form>
             </li>
             <li id="greeting">
@@ -80,7 +80,7 @@ if (isset($_SESSION['name'])) {
             $query = "SELECT * FROM adoption_request WHERE approved=0";
             $result = $db->query($query);
             $has_adoption_request = false;
-            while ($animal = $result->fetch()) {;
+            while ($animal = $result->fetch()) {
                 $adoption_id = $animal['adoption_id'];
                 $adopter = $animal['user_id'];
                 print_animal_info($animal, $db, "Approve", "Deny", "handle_request.php", "get", $adoption_id, $adopter);

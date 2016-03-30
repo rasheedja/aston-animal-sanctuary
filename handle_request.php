@@ -43,7 +43,7 @@ if (isset($_SESSION['name'])) {
             </li>
             <li id="search">
                 <form action="search.php" method="get">
-                    <input type="text" name="search_bar" id="search_bar">
+                    <input type="search" name="search_bar" id="search_bar">
                 </form>
             </li>
             <li id="greeting">
@@ -60,7 +60,7 @@ if (isset($_SESSION['name'])) {
             // set the adoption request to approved
             $adoption_id = $_GET['approve'];
             $query = "UPDATE adoption_request SET approved=1 WHERE adoption_id=$adoption_id";
-            $db->query($query);
+            $db->exec($query);
             // switch the owner for the pet
             $query = "SELECT * FROM adoption_request WHERE adoption_id = $adoption_id";
             $result = $db->query($query);
@@ -68,20 +68,20 @@ if (isset($_SESSION['name'])) {
             $user_id = $adoption_info['user_id'];
             $animal_id = $adoption_info['animal_id'];
             $query = "UPDATE owns SET user_id=$user_id WHERE animal_id=$animal_id";
-            $db->query($query);
+            $db->exec($query);
             echo "<h3>Adoption Request Approved</h3>";
         } else if (isset($_GET['deny'])) {
             // set the adoption request to denied
             $adoption_id = $_GET['deny'];
             $query = "UPDATE adoption_request SET approved=2 WHERE adoption_id=$adoption_id";
-            $db->query($query);
+            $db->exec($query);
             // switch the pet back to available
             $query = "SELECT animal_id FROM adoption_request WHERE adoption_id = $adoption_id";
             $result = $db->query($query);
             $animal_id = $result->fetch();
             $animal_id = $animal_id['animal_id'];
             $query = "UPDATE animals SET available=1 WHERE id=$animal_id";
-            $db->query($query);
+            $db->exec($query);
             echo "<h3>Adoption Request Denied</h3>";
         }
         ?>

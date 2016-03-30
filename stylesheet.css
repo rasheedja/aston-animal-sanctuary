@@ -110,3 +110,8 @@ a:visited {
 .animal-info li {
     list-style-type: none;
 }
+
+textarea {
+    height: 250px;
+    width: 500px;
+}

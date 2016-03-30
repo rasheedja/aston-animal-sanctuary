@@ -60,7 +60,7 @@ if (isset($_SESSION['name'])) {
             </li>
             <li id="search">
                 <form action="search.php" method="get">
-                    <input type="text" name="search_bar" id="search_bar">
+                    <input type="search" name="search_bar" id="search_bar">
                 </form>
             </li>
             <li id="greeting">

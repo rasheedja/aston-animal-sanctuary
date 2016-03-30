@@ -47,7 +47,7 @@ if (isset($_SESSION['name'])) {
             </li>
             <li id="search">
                 <form action="search.php" method="get">
-                    <input type="text" name="search_bar" id="search_bar">
+                    <input type="search" name="search_bar" id="search_bar">
                 </form>
             </li>
             <li id="greeting">
@@ -61,10 +61,11 @@ if (isset($_SESSION['name'])) {
     <div id="inner-center">
         <div class="animals">
             <h3>Animals</h3>
+            <a class="button" href="add_animal.php">Add Animal</a>
             <?php
             // display information on all animals
             while ($animal_info = $result -> fetch()) {
-                parse_animal_info($animal_info);
+                parse_animal_info($animal_info, "Edit", null, "edit_animal.php", $_GET);
             }
             ?>
         </div>
