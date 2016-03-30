@@ -131,10 +131,12 @@ if (isset($_SESSION['name'])) {
                         }
                     }
                 }
+                // store animal information from POST into variables
                 $name = $_POST['name'];
                 $birthday = $_POST['birthday'];
                 $description = $_POST['description'];
                 $type = $_POST['type'];
+                // check if any field was left empty
                 if ($name == null && $error_thrown == false) {
                     echo "<p class='error'>Enter a name for the animal.</p>";
                     $error_thrown = true;

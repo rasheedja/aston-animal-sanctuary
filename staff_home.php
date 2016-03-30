@@ -16,7 +16,6 @@ if (isset($_SESSION['name'])) {
         header("Location: home.php");
     }
     include_once('display_animal.php');
-    //DELETE FROM owns WHERE user_id = 1 AND animal_id = 1
 } else {
     header("Location: index.php");
 }

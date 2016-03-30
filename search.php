@@ -50,6 +50,7 @@ if (isset($_SESSION['name'])) {
     <div id="main">
         <div id = "nav-bar">
             <ul id="nav">
+                <!--Use the correct links depending on whether the user is a staff member or not-->
                 <li>
                     <a href=<?php if($staff) {echo "staff_home.php";} else {echo "home.php";} ?>>Home</a>
                 </li>

@@ -24,10 +24,10 @@ if (isset($_SESSION['name'])) {
     $availability = $result->fetch();
     $availability = $availability['available'];
     if ($availability != 0) {
-        $query = "INSERT INTO `rasheeja_db`.`adoption_request` (`adoption_id`, `user_id`, `animal_id`, `approved`) VALUES (NULL, '$user_id', '$animal_id', '0')";
+        $query = "INSERT INTO adoption_request (adoption_id, user_id, animal_id, approved) VALUES (NULL, '$user_id', '$animal_id', '0')";
         $db->exec($query);
         // make the animal unavailable
-        $query = "UPDATE `rasheeja_db`.`animals` SET `available` = '0' WHERE `animals`.`id` = '$animal_id' ";
+        $query = "UPDATE animals SET available = '0' WHERE id = '$animal_id' ";
         $db->exec($query);
         $adoption_request_made = true;
     }-

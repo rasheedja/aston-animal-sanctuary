@@ -1,4 +1,14 @@
 <?php
+/**
+ * @param $animal SQL result of an adoption request
+ * @param $db SQL database
+ * @param $button_text_1 Text for the first button
+ * @param $button_text_2 Text for the second button
+ * @param $action Page to load when a button is clicked
+ * @param $method Method to use when a button is clicked
+ * @param $value Value to be passed when a button is clicked
+ * @param $user_id User id used to show the ID of an Adopter
+ */
 function print_animal_info($animal, $db, $button_text_1, $button_text_2, $action, $method, $value, $user_id) {
     $animal_id = $animal['animal_id'];
     $_GET['animal_id'] = $animal_id;
@@ -9,6 +19,15 @@ function print_animal_info($animal, $db, $button_text_1, $button_text_2, $action
     }
 }
 
+/**
+ * @param $animal_info SQL result of an animal
+ * @param $button_text_1 Text for the first button
+ * @param $button_text_2 Text for the second button
+ * @param $action Page to load when a button is clicked
+ * @param $method Method to use when a button is clicked
+ * @param $value Value to be passed when a button is clicked
+ * @param $user_id User id used to show the ID of an Adopter
+ */
 function parse_animal_info($animal_info, $button_text_1, $button_text_2, $action, $method, $value, $user_id) {
     $name = $animal_info['name'];
     $dob = $animal_info['date_of_birth'];
@@ -30,6 +49,14 @@ function parse_animal_info($animal_info, $button_text_1, $button_text_2, $action
     echo "</ul>";
 }
 
+/**
+ * @param $animal_id ID for an animal which is set to the value of a button if no value has been passed
+ * @param $button_text_1 Text for the first button
+ * @param $button_text_2 Text for the second button
+ * @param $action Page to load when a button is clicked
+ * @param $method Method to use when a button is clicked
+ * @param $value Value to be passed when a button is clicked
+ */
 function print_buttons($animal_id, $button_text_1, $button_text_2, $action, $method, $value) {
     if ($value == null) {
         $value = $animal_id;

@@ -129,7 +129,7 @@ if (isset($_SESSION['name'])) {
                     $picture_valid = false;
                     $error_thrown = true;
                 }
-                // Allow certain file formats
+                // Allow certain file formats (must be lower case)
                 if($file_type != "jpg" && $file_type != "png" && $file_type != "jpeg"
                     && $file_type != "gif" && $error_thrown == false) {
                     echo "<p class='error'>File type not valid. Only jpg, png, jpeg, and gif file types are accepted.</p>";
