@@ -19,10 +19,17 @@ if (isset($_SESSION['name'])) {
     if ($user['staff'] == 0) {
         header("Location: home.php");
     }
-    $animal_id = $_GET['edit'];
-    $query = "SELECT * FROM animals WHERE id=$animal_id";
-    $result = $db->query($query);
-    $animal = $result->fetch();
+    // don't execute the code in the if statement if a form has been submitted
+    if ($_GET['edit'] != null) {
+        // information on the animal to edit
+        $animal_id = $_GET['edit'];
+        $query = "SELECT * FROM animals WHERE id=$animal_id";
+        $result = $db->query($query);
+        $animal = $result->fetch();
+        $name = $animal['name'];
+        $birthday = $animal['date_of_birth'];
+        $description = $animal['description'];
+    }
 } else {
     header("Location: index.php");
 }
@@ -67,15 +74,15 @@ if (isset($_SESSION['name'])) {
             <h3>Input Details Below</h3>
             <form action="edit_animal.php" method="post" enctype="multipart/form-data">
                 Name:
-                <input type="text" name="name" size="15" maxlength="32" value="<?php echo $animal['name']; ?>" />
+                <input type="text" name="name" size="15" maxlength="32" value="<?php echo $name; ?>" />
                 <br />
                 Date of Birth:
-                <input type="date" name="birthday" value="<?php echo $animal['date_of_birth']?>"/>
+                <input type="date" name="birthday" value="<?php echo $birthday?>"/>
                 <br />
                 Description:
-                <textarea name="description" rows="1" cols="1" maxlength="2000"><?php echo $animal['description']; ?></textarea>
+                <textarea name="description" rows="1" cols="1" maxlength="2000"><?php echo $description; ?></textarea>
                 <br />
-                Picture (Do not change if you want to use the old picture):
+                Picture (Leave blank if you want to use the old picture):
                 <input type="file" name="picture">
                 <br />
                 <input class = "button" type="submit" name="submit" value="Submit" />
@@ -132,6 +139,7 @@ if (isset($_SESSION['name'])) {
                     }
                 }
             }
+            // updated (or original) information
             $name = $_POST['name'];
             $birthday = $_POST['birthday'];
             $description = $_POST['description'];
@@ -139,10 +147,13 @@ if (isset($_SESSION['name'])) {
                 $query = "UPDATE animals SET name='$name', date_of_birth='$birthday', description='$description'";
                 $db->exec($query);
                 if ($picture != null) {
+                    // use the specified picture if one was uploaded
                     $query = "UPDATE animals SET photo='$picture'";
                     $db->exec($query);
                 }
             }
+            // take user back to animals page
+            header("Location: staff_animals.php");
         }
         ?>
     </div>

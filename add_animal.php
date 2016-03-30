@@ -71,7 +71,7 @@ if (isset($_SESSION['name'])) {
                 Description:
                 <textarea name="description" rows="1" cols="1" maxlength="2000"></textarea>
                 <br />
-                Picture:
+                Picture (leave blank to use the default picture):
                 <input type="file" name="picture">
                 <br />
                 <input class = "button" type="submit" name="submit" value="Submit" />
