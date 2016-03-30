@@ -79,8 +79,13 @@ if (isset($_SESSION['name'])) {
                 // display information on animals that meet the search query
                 $search_found = false;
                 while ($animal_info = $result -> fetch()) {
-                    parse_animal_info($animal_info, "Adopt", null, "make_request.php", "get");
-                    $search_found = true;
+                    if ($staff) {
+                        parse_animal_info($animal_info);
+                        $search_found = true;
+                    } else {
+                        parse_animal_info($animal_info, "Adopt", null, "make_request.php", "get");
+                        $search_found = true;
+                    }
                 }
                 if (!$search_found) {
                     echo "<p class='error'>$search_query returned no results</p>";
