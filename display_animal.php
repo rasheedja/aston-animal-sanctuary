@@ -23,7 +23,9 @@ function parse_animal_info($animal_info, $button_text_1, $button_text_2, $action
     echo "<li>$age</li>";
     echo "<li>$dob</li>";
     echo "<li>$description</li>";
-    echo "<li>Adopter's ID: $user_id</li>";
+    if ($user_id != null) {
+        echo "<li>Adopter's ID: $user_id</li>";
+    }
     print_buttons($animal_id, $button_text_1, $button_text_2, $action, $method, $value);
     echo "</ul>";
 }
