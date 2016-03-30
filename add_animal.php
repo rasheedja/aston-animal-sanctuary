@@ -70,6 +70,9 @@ if (isset($_SESSION['name'])) {
                 <br />
                 Description:
                 <textarea name="description" rows="1" cols="1" maxlength="2000"></textarea>
+                <br />                
+                Type:
+                <input type="text" name="type" size="15" maxlength="32" />
                 <br />
                 Picture (leave blank to use the default picture):
                 <input type="file" name="picture">
@@ -131,6 +134,7 @@ if (isset($_SESSION['name'])) {
                 $name = $_POST['name'];
                 $birthday = $_POST['birthday'];
                 $description = $_POST['description'];
+                $type = $_POST['type'];
                 if ($name == null && $error_thrown == false) {
                     echo "<p class='error'>Enter a name for the animal.</p>";
                     $error_thrown = true;
@@ -143,16 +147,17 @@ if (isset($_SESSION['name'])) {
                     echo "<p class='error'>Enter a description for the animal</p>";
                     $error_thrown = true;
                 }
+                if ($type == null) {
+                    echo "<p class='error'>Enter a type for the animal</p>";
+                }
                 if ($error_thrown == false) {
-                    $query = "INSERT INTO animals (id, name, date_of_birth, description, photo, available) VALUES (NULL, '$name', '$birthday', '$description', '$target', '1')";
-                    $db->exec($query);
-                    if ($result) {
+                    $query = "INSERT INTO animals (id, name, date_of_birth, description, photo, available, type) VALUES (NULL, '$name', '$birthday', '$description', '$target', '1', '$type')";
+                    if ($db->exec($query)) {
                         echo "<p>Animal uploaded to database</p>";
                         // update owns table so animal is owned by the owner
                         $last_id = $db->lastInsertId();
                         $query = "INSERT INTO owns (user_id, animal_id) VALUES ('1', '$last_id')";
                         $db->exec($query);
-
                     } else {
                         echo "<p class='error'>Database error. Try again later.";
                     }

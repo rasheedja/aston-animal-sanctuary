@@ -20,6 +20,7 @@ if (isset($_SESSION['name'])) {
         header("Location: home.php");
     }
     // don't execute the code in the if statement if a form has been submitted
+    $animal_id = null;
     if ($_GET['edit'] != null) {
         // information on the animal to edit
         $animal_id = $_GET['edit'];
@@ -29,6 +30,7 @@ if (isset($_SESSION['name'])) {
         $name = $animal['name'];
         $birthday = $animal['date_of_birth'];
         $description = $animal['description'];
+        $type = $animal['type'];
     }
 } else {
     header("Location: index.php");
@@ -82,11 +84,15 @@ if (isset($_SESSION['name'])) {
                 Description:
                 <textarea name="description" rows="1" cols="1" maxlength="2000"><?php echo $description; ?></textarea>
                 <br />
+                Type:
+                <input type="text" name="type" size="15" maxlength="32" value="<?php echo $type; ?>" />
+                <br />
                 Picture (Leave blank if you want to use the old picture):
                 <input type="file" name="picture">
                 <br />
                 <input class = "button" type="submit" name="submit" value="Submit" />
-                <input type="hidden" name="submitted" value="TRUE" />
+                <!--Set the animal id as the submitted value-->
+                <input type="hidden" name="submitted" value="<?php echo $animal_id ?>" />
             </form>
         </div>
         <?php
@@ -143,17 +149,21 @@ if (isset($_SESSION['name'])) {
             $name = $_POST['name'];
             $birthday = $_POST['birthday'];
             $description = $_POST['description'];
+            $type = $_POST['type'];
+            $animal_id = $_POST['submitted'];
             if ($error_thrown == false) {
-                $query = "UPDATE animals SET name='$name', date_of_birth='$birthday', description='$description'";
+                $query = "UPDATE animals SET name='$name', date_of_birth='$birthday', description='$description', type='$type' WHERE id='$animal_id'";
                 $db->exec($query);
                 if ($picture != null) {
                     // use the specified picture if one was uploaded
-                    $query = "UPDATE animals SET photo='$picture'";
+                    $query = "UPDATE animals SET photo='$picture' WHERE id='$animal_id'";
                     $db->exec($query);
                 }
             }
-            // take user back to animals page
-            header("Location: staff_animals.php");
+            if ($error_thrown == false) {
+                // take user back to animals page
+                header("Location: staff_animals.php");
+            }
         }
         ?>
     </div>

@@ -23,8 +23,8 @@ if (isset($_SESSION['name'])) {
         $latest_date_of_birth = date("Y-m-d", $latest_date_of_birth);
         $query = "SELECT * FROM animals WHERE available=1 AND date_of_birth<='$latest_date_of_birth' AND date_of_birth>='$earliest_date_of_birth' OR id=$age";
     } else {
-        // search for animals with a name that was searched for
-        $query = "SELECT * FROM animals WHERE available=1 AND name LIKE '%$search_query%'";
+        // search for animals with a name or type that was searched for
+        $query = "SELECT * FROM animals WHERE available=1 AND name LIKE '%$search_query%' OR type LIKE '%$search_query%'";
     }
     $result = $db->query($query);
     // check and store whether a user is a staff member or not

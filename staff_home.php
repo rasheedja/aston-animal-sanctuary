@@ -58,7 +58,7 @@ if (isset($_SESSION['name'])) {
     </div>
     <div id="inner-center">
         <div class="animals">
-            <h3>Available Animals</h3>
+            <h3>Your Animals</h3>
             <?php
             // display the information on the animals owned by the user
             $query = "SELECT * FROM owns WHERE user_id = $user_id";
